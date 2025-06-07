@@ -7,7 +7,7 @@ setup(
     name="uncomputable-optimizer",
     version="0.1.0",
     author="Ashutosh",
-    author_email="your.email@example.com",  # Update this
+    author_email="ashu.iitr1069@gmail.com",  # Update this
     description="A Bayesian optimization framework for handling computationally expensive and potentially uncomputable objective functions",
     long_description=long_description,
     long_description_content_type="text/markdown",
