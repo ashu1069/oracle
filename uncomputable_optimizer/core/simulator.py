@@ -37,7 +37,8 @@ def halting_probability_function(x):
     return np.clip(prob, 0.05, 0.95)
 
 # The Uncomputable Simulator
-def uncomputable_oracle(x, time_limit_per_eval = 0.05, penalty_value = -1000.0):
+def uncomputable_oracle(x, time_limit_per_eval = 0.05, penalty_value = -1000.0, 
+                        objective_function=None, halting_probability_function=None):
     '''
     This function simulates the black-box objective evaluation; takes an input "x" and attempts to compute "true_objective_function(x)".
     However, based on "halting_probability_function(x)", it might "hang" and return a penalty instead.
@@ -46,14 +47,17 @@ def uncomputable_oracle(x, time_limit_per_eval = 0.05, penalty_value = -1000.0):
         x (float): input value for the objective function
         time_limit_per_eval (float): the maximum time allowed for a single evaluation
         penalty_value (float): the value returned if the computation "times out"
+        objective_function (callable, optional): custom objective function
+        halting_probability_function (callable, optional): custom halting probability function
     Returns:
         float: the true objective if the computation halts, or penalty_value
         bool: True if halted, false if it times out
     '''
     start_time = time.time()
     
-    # Determine if this specific evaluation "halts" based on the hidden probability
-    halt_chance = halting_probability_function(x)
+    # Use custom or default halting probability function
+    halt_prob_func = halting_probability_function if halting_probability_function is not None else globals()['halting_probability_function']
+    halt_chance = halt_prob_func(x)
 
     if random.random() < halt_chance:
         # simulate computation time for a halted evaluation; this makes it feel like a real computation, even if quick
@@ -66,14 +70,16 @@ def uncomputable_oracle(x, time_limit_per_eval = 0.05, penalty_value = -1000.0):
             print(f"Warning: Halted computation for x = {x:.2f} exceeded time limit. Timeout!")
             return penalty_value, False 
         
-        return true_objective_function(x), True
+        obj_func = objective_function if objective_function is not None else globals()['true_objective_function']
+        return obj_func(x), True
 
     else:
         return penalty_value, False
 
 # Initial Data Collection Strategy
 
-def collect_initial_data(num_samples = 5, x_min = 0.0, x_max = 10.0, **oracle_kwargs):
+def collect_initial_data(num_samples = 5, x_min = 0.0, x_max = 10.0, 
+                        objective_function=None, halting_probability_function=None, **oracle_kwargs):
     '''
     Collects an intial set of data points by randomly sampling the domain.
     This provides the starting observations for our AI's models
@@ -86,7 +92,12 @@ def collect_initial_data(num_samples = 5, x_min = 0.0, x_max = 10.0, **oracle_kw
         x = random.uniform(x_min, x_max)
         print(f"Probing x = {x:0.2f} (sample {i+1}/{num_samples})...", end="")
 
-        value, halted = uncomputable_oracle(x, **oracle_kwargs)
+        value, halted = uncomputable_oracle(
+            x, 
+            objective_function=objective_function, 
+            halting_probability_function=halting_probability_function, 
+            **oracle_kwargs
+        )
 
         if halted:
             successful_evals.append((x, value))

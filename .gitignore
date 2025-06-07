@@ -192,3 +192,28 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+# Project specific
+demo_video/
+*.mp4
+*.gif
+*.html
+*.png
+*.jpg
+*.jpeg
+*.pdf
+
+# Jupyter notebooks
+*.ipynb
+
+# Local development
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Distribution
+dist/
+build/
+*.egg-info/

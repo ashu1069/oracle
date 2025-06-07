@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from sklearn.gaussian_process import GaussianProcessRegressor, GaussianProcessClassifier
 from sklearn.gaussian_process.kernels import Matern, WhiteKernel, ConstantKernel
 from sklearn.preprocessing import StandardScaler
-from simulator import uncomputable_oracle, true_objective_function, halting_probability_function, collect_initial_data
+from .simulator import uncomputable_oracle, true_objective_function, halting_probability_function, collect_initial_data
 
 # Initialize and Train Gaussian Process Regressor (MF)
 def initialize_gp_regressor():
@@ -62,6 +62,11 @@ def train_gp_classifier(gp_classifier, successful_evals, timed_out_evals):
 
     X_train = np.concatenate((X_halted, X_timed_out)).reshape(-1,1)
     y_train = np.concatenate((np.ones_like(X_halted), np.zeros_like(X_timed_out)))
+
+    # Check for at least two classes
+    if len(np.unique(y_train)) < 2:
+        print("Warning: Only one class present in training data for GP classifier. Skipping fit.")
+        return gp_classifier
 
     X_train_scaled = gp_classifier.scaler_.fit_transform(X_train)
     gp_classifier.fit(X_train_scaled, y_train)
