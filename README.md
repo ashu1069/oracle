@@ -2,7 +2,7 @@
 
 A Bayesian optimization framework for handling computationally expensive and potentially uncomputable objective functions. This project demonstrates how to build an intelligent optimizer that can handle the uncertainty of computation itself.
 
-![Synchronized Animation](synchronized_animation.mp4)
+https://github.com/ashu1069/oracle/synchronized_animation.mp4
 
 ## Motivation: Optimization Meets Uncomputability
 
