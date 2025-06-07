@@ -99,7 +99,6 @@ For detailed documentation, including tutorials and API reference, visit our [do
 
 ## Learning Resources
 
-- [Tutorial Notebooks](notebooks/): Step-by-step guides on using the optimizer
 - [Conceptual Guide](docs/concepts.md): Deep dive into the mathematical and conceptual foundations
 - [API Reference](docs/api.md): Detailed API documentation
 
