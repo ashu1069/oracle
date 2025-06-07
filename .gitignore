@@ -204,7 +204,7 @@ demo_video/
 *.pdf
 
 # Jupyter notebooks
-*.ipynb
+# *.ipynb
 
 # Local development
 .DS_Store
